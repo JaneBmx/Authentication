@@ -9,10 +9,8 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
-import java.util.Map;
 import java.util.logging.Logger;
 
 @Controller
@@ -38,19 +36,8 @@ public class RegistrationController {
     }
 
     @PostMapping("/processRegistrationForm")
-    public String processRegistrationFormPost(@Valid @ModelAttribute("crmUser") CrmUser theCrmUser,
-                                              final RedirectAttributes redirectAttributes,
-                                              BindingResult theBindingResult) {
-        redirectAttributes.addFlashAttribute("crmUser", theCrmUser);
-        redirectAttributes.addFlashAttribute("bindingResult", theBindingResult);
-        return "redirect:/register/processRegistrationForm";
-    }
-
-    @GetMapping("/processRegistrationForm")
-    public String processRegistrationFormGet(Model model) {
-        Map<String, Object> map = model.asMap();
-        CrmUser crmUser = (CrmUser) map.get("crmUser");
-        BindingResult bindingResult = (BindingResult) map.get("bindingResult");
+    public String processRegistrationFormPost(@Valid @ModelAttribute("crmUser") CrmUser crmUser,
+                                              BindingResult bindingResult, Model model) {
         String userName = crmUser.getUserName();
         logger.info("Processing registration form for: " + userName);
         if (bindingResult.hasErrors()) return "registration-form";
